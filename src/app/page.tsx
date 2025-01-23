@@ -59,6 +59,12 @@ export default function Home() {
 	return (
 		<main className="h-screen max-h-screen flex flex-col">
 			<Header />
+			{/* Tabs - Now at the top */}
+			<Tabs
+				tabs={tabs}
+				activeTab={activeTab}
+				onTabChange={setActiveTab}
+			/>
 			<div className="flex-grow flex overflow-hidden relative">
 				{/* Course Picker - Hidden on mobile when calendar tab is active */}
 				<div
@@ -82,12 +88,6 @@ export default function Home() {
 					<ScheduleCalendar selectedCourses={selectedCourses} />
 				</div>
 			</div>
-			{/* Tabs - Only visible on mobile */}
-			<Tabs
-				tabs={tabs}
-				activeTab={activeTab}
-				onTabChange={setActiveTab}
-			/>
 		</main>
 	);
 }
