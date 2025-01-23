@@ -138,24 +138,22 @@ export function ScheduleCalendar({ selectedCourses }: ScheduleCalendarProps) {
 	}, [selectedCourses]);
 
 	return (
-		<div className="h-full p-4">
+		<div className="h-full">
 			<Calendar
-				localizer={localizer}
+				defaultView={Views.WORK_WEEK}
+				views={[Views.WORK_WEEK]}
 				events={events}
-				defaultView={Views.WEEK}
-				views={[Views.WEEK]}
-				min={dayjs().hour(8).minute(0).toDate()}
-				max={dayjs().hour(22).minute(0).toDate()}
-				formats={{
-					timeGutterFormat: "h:mm A",
-					eventTimeRangeFormat: ({ start, end }) =>
-						`${dayjs(start).format("h:mm A")} - ${dayjs(end).format(
-							"h:mm A"
-						)}`,
-				}}
+				localizer={localizer}
+				className="h-full"
+				min={dayjs().set("hour", 6).set("minute", 0).toDate()}
+				max={dayjs().set("hour", 21).set("minute", 0).toDate()}
+				onDrillDown={() => {}}
 				// components={{
-				// 	event: EventWrapper,
+				// 	eventWrapper: EventWrapper,
 				// }}
+				toolbar={false}
+				step={30}
+				timeslots={2}
 			/>
 		</div>
 	);
