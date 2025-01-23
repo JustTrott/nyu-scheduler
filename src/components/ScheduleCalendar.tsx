@@ -17,147 +17,149 @@ export function ScheduleCalendar({ selectedCourses }: ScheduleCalendarProps) {
 	const events = useMemo(() => {
 		const allEvents: Event[] = [];
 
-		console.log(
-			"Converting courses to events. Selected courses:",
-			selectedCourses
-		);
-
 		selectedCourses.forEach((selectedCourse) => {
 			// Add section events
 			if (selectedCourse.selectedSection) {
 				const section = selectedCourse.selectedSection;
-				console.log(
-					"Processing section for course:",
-					selectedCourse.course.code,
-					section
-				);
-
 				section.schedule.days.forEach((day) => {
-					const dayIndex = getDayIndex(day);
-					if (dayIndex !== -1) {
-						const event = {
-							title: `${selectedCourse.course.code} - Section`,
-							start: getDateFromTimeString(
-								dayIndex,
-								section.schedule.startTime
-							),
-							end: getDateFromTimeString(
-								dayIndex,
-								section.schedule.endTime
-							),
-							resource: {
-								type: "section",
-								course: selectedCourse.course,
-								location: section.schedule.location,
-								instructor: section.professor,
-							},
-						};
-						console.log("Created section event:", event);
-						allEvents.push(event);
-					}
+					const event: Event = {
+						title: `${selectedCourse.course.code} - ${selectedCourse.course.name}`,
+						start: dayjs()
+							.day(getDayIndex(day))
+							.hour(
+								parseInt(
+									section.schedule.startTime.split(":")[0]
+								)
+							)
+							.minute(
+								parseInt(
+									section.schedule.startTime.split(":")[1]
+								)
+							)
+							.toDate(),
+						end: dayjs()
+							.day(getDayIndex(day))
+							.hour(
+								parseInt(section.schedule.endTime.split(":")[0])
+							)
+							.minute(
+								parseInt(section.schedule.endTime.split(":")[1])
+							)
+							.toDate(),
+						resource: {
+							type: "section",
+							professor: section.professor,
+							location: section.schedule.location,
+						},
+					};
+					allEvents.push(event);
 				});
 			}
 
 			// Add recitation events
 			if (selectedCourse.selectedRecitation) {
 				const recitation = selectedCourse.selectedRecitation;
-				console.log(
-					"Processing recitation for course:",
-					selectedCourse.course.code,
-					recitation
-				);
-
 				recitation.schedule.days.forEach((day) => {
-					const dayIndex = getDayIndex(day);
-					if (dayIndex !== -1) {
-						const event = {
-							title: `${selectedCourse.course.code} - Recitation`,
-							start: getDateFromTimeString(
-								dayIndex,
-								recitation.schedule.startTime
-							),
-							end: getDateFromTimeString(
-								dayIndex,
-								recitation.schedule.endTime
-							),
-							resource: {
-								type: "recitation",
-								course: selectedCourse.course,
-								location: recitation.schedule.location,
-								instructor: recitation.instructor,
-							},
-						};
-						console.log("Created recitation event:", event);
-						allEvents.push(event);
-					}
+					const event: Event = {
+						title: `${selectedCourse.course.code} - Recitation`,
+						start: dayjs()
+							.day(getDayIndex(day))
+							.hour(
+								parseInt(
+									recitation.schedule.startTime.split(":")[0]
+								)
+							)
+							.minute(
+								parseInt(
+									recitation.schedule.startTime.split(":")[1]
+								)
+							)
+							.toDate(),
+						end: dayjs()
+							.day(getDayIndex(day))
+							.hour(
+								parseInt(
+									recitation.schedule.endTime.split(":")[0]
+								)
+							)
+							.minute(
+								parseInt(
+									recitation.schedule.endTime.split(":")[1]
+								)
+							)
+							.toDate(),
+						resource: {
+							type: "recitation",
+							instructor: recitation.instructor,
+							location: recitation.schedule.location,
+						},
+					};
+					allEvents.push(event);
 				});
 			}
 
 			// Add lab events
 			if (selectedCourse.selectedLab) {
 				const lab = selectedCourse.selectedLab;
-				console.log(
-					"Processing lab for course:",
-					selectedCourse.course.code,
-					lab
-				);
-
 				lab.schedule.days.forEach((day) => {
-					const dayIndex = getDayIndex(day);
-					if (dayIndex !== -1) {
-						const event = {
-							title: `${selectedCourse.course.code} - Lab`,
-							start: getDateFromTimeString(
-								dayIndex,
-								lab.schedule.startTime
-							),
-							end: getDateFromTimeString(
-								dayIndex,
-								lab.schedule.endTime
-							),
-							resource: {
-								type: "lab",
-								course: selectedCourse.course,
-								location: lab.schedule.location,
-								instructor: lab.instructor,
-							},
-						};
-						console.log("Created lab event:", event);
-						allEvents.push(event);
-					}
+					const event: Event = {
+						title: `${selectedCourse.course.code} - Lab`,
+						start: dayjs()
+							.day(getDayIndex(day))
+							.hour(
+								parseInt(lab.schedule.startTime.split(":")[0])
+							)
+							.minute(
+								parseInt(lab.schedule.startTime.split(":")[1])
+							)
+							.toDate(),
+						end: dayjs()
+							.day(getDayIndex(day))
+							.hour(parseInt(lab.schedule.endTime.split(":")[0]))
+							.minute(
+								parseInt(lab.schedule.endTime.split(":")[1])
+							)
+							.toDate(),
+						resource: {
+							type: "lab",
+							instructor: lab.instructor,
+							location: lab.schedule.location,
+						},
+					};
+					allEvents.push(event);
 				});
 			}
 		});
 
-		console.log("Final events array:", allEvents);
 		return allEvents;
 	}, [selectedCourses]);
 
 	return (
-		<div className="h-full">
+		<div className="h-full p-4">
 			<Calendar
-				defaultView={Views.WORK_WEEK}
-				views={[Views.WORK_WEEK]}
-				events={events}
 				localizer={localizer}
-				className="h-full"
-				min={dayjs().set("hour", 6).set("minute", 0).toDate()}
-				max={dayjs().set("hour", 21).set("minute", 0).toDate()}
-				onDrillDown={() => {}}
-				// components={{
-				// 	eventWrapper: EventWrapper,
-				// }}
-				toolbar={false}
-				step={30}
-				timeslots={2}
+				events={events}
+				defaultView={Views.WEEK}
+				views={[Views.WEEK]}
+				min={dayjs().hour(8).minute(0).toDate()}
+				max={dayjs().hour(22).minute(0).toDate()}
+				formats={{
+					timeGutterFormat: "h:mm A",
+					eventTimeRangeFormat: ({ start, end }) =>
+						`${dayjs(start).format("h:mm A")} - ${dayjs(end).format(
+							"h:mm A"
+						)}`,
+				}}
+				components={{
+					event: EventWrapper,
+				}}
 			/>
 		</div>
 	);
 }
 
-// Helper function to convert day string to index (0 = Sunday, 1 = Monday, etc.)
 function getDayIndex(day: string): number {
-	const days = {
+	const dayMap: Record<string, number> = {
 		Sun: 0,
 		Mon: 1,
 		Tue: 2,
@@ -166,44 +168,45 @@ function getDayIndex(day: string): number {
 		Fri: 5,
 		Sat: 6,
 	};
-	return days[day as keyof typeof days] ?? -1;
+	return dayMap[day] || 0;
 }
 
-// Helper function to create Date object from time string
-function getDateFromTimeString(dayIndex: number, timeString: string): Date {
-	const [hours, minutes] = timeString.split(":").map(Number);
-	return dayjs()
-		.startOf("week")
-		.add(dayIndex, "day")
-		.set("hour", hours)
-		.set("minute", minutes)
-		.toDate();
+interface EventWrapperProps {
+	event: Event;
 }
 
-// Custom event component to show more details. For now, we're not using this.
-// function EventWrapper({ event }: { event: Event }) {
-// 	const resource = event.resource as {
-// 		type: "section" | "recitation" | "lab";
-// 		course: Course;
-// 		location: string;
-// 		instructor: string;
-// 	};
+function EventWrapper({ event }: EventWrapperProps) {
+	const resource = event.resource as {
+		type: "section" | "recitation" | "lab";
+		professor?: string;
+		instructor?: string;
+		location: string;
+	};
 
-// 	const typeColors = {
-// 		section: "bg-purple-100 border-purple-300",
-// 		recitation: "bg-blue-100 border-blue-300",
-// 		lab: "bg-green-100 border-green-300",
-// 	};
+	const getEventClass = () => {
+		switch (resource.type) {
+			case "section":
+				return "bg-purple-100 border-purple-300 text-purple-900";
+			case "recitation":
+				return "bg-blue-100 border-blue-300 text-blue-900";
+			case "lab":
+				return "bg-green-100 border-green-300 text-green-900";
+			default:
+				return "";
+		}
+	};
 
-// 	return (
-// 		<div
-// 			className={`p-1 rounded border ${
-// 				typeColors[resource.type]
-// 			} overflow-hidden text-xs`}
-// 		>
-// 			<div className="font-medium">{event.title}</div>
-// 			<div>{resource.location}</div>
-// 			<div>{resource.instructor}</div>
-// 		</div>
-// 	);
-// }
+	return (
+		<div
+			className={`p-1 h-full border rounded ${getEventClass()} overflow-hidden`}
+		>
+			<div className="font-medium text-sm truncate">{event.title}</div>
+			<div className="text-xs truncate">
+				{resource.professor || resource.instructor}
+			</div>
+			{resource.location && (
+				<div className="text-xs truncate">{resource.location}</div>
+			)}
+		</div>
+	);
+}

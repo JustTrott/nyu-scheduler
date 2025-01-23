@@ -8,7 +8,7 @@ export function Header() {
 					NYU Scheduler
 				</h1>
 				<a
-					href="https://github.com/yourusername/nyu-scheduler"
+					href="https://github.com/JustTrott/nyu-scheduler"
 					target="_blank"
 					rel="noopener noreferrer"
 					className="text-gray-700 hover:text-gray-900 transition-colors"

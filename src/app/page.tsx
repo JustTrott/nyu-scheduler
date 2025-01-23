@@ -34,7 +34,6 @@ export default function Home() {
 
 	// Add logging when courses change
 	const handleCoursesChange = (newCourses: SelectedCourse[]) => {
-		console.log("Selected Courses Updated:", newCourses);
 		setSelectedCourses(newCourses);
 	};
 

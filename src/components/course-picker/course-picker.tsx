@@ -25,7 +25,6 @@ export function CoursePicker({
 }: CoursePickerProps) {
 	const { data: semesters, isLoading: isLoadingSemesters } = useSemesters();
 	const [searchQuery, setSearchQuery] = useState("");
-	console.log(selectedSemesterId);
 	const { data: searchResults, isLoading: isSearching } = useCourseSearch(
 		selectedSemesterId,
 		searchQuery
