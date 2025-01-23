@@ -27,7 +27,7 @@ export function useCourseSearch(semesterId: string, query: string) {
 		queryKey: ["courses", semesterId, debouncedQuery],
 		queryFn: () => searchCourses(semesterId, debouncedQuery),
 		enabled: Boolean(
-			semesterId && debouncedQuery && debouncedQuery.length >= 2
+			semesterId && debouncedQuery && debouncedQuery.length >= 1
 		),
 		staleTime: 1000 * 60 * 60 * 12, // 12 hours cache
 	});
