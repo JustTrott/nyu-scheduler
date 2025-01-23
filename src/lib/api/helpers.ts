@@ -57,3 +57,28 @@ export function formatTime(time: string): string {
 	const minutes = time.slice(-2);
 	return `${hours}:${minutes}`;
 }
+
+export function parseMeetingTimes(meetingTimesStr: string): {
+	days: string[];
+	startTime: string;
+	endTime: string;
+} {
+	try {
+		const meetingTimes = JSON.parse(meetingTimesStr);
+		const days = meetingTimes
+			.map((mt: { meet_day: string }) => parseMeetingDays(mt.meet_day))
+			.filter(Boolean);
+
+		// Take times from first entry since they're the same
+		const startTime = formatTime(meetingTimes[0]?.start_time || "");
+		const endTime = formatTime(meetingTimes[0]?.end_time || "");
+
+		return { days, startTime, endTime };
+	} catch {
+		return { days: [], startTime: "", endTime: "" };
+	}
+}
+
+export function formatDays(days: string[]): string {
+	return days.join("");
+}

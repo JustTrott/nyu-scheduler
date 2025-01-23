@@ -50,6 +50,9 @@ export function ScheduleCalendar({ selectedCourses }: ScheduleCalendarProps) {
 							type: "section",
 							professor: section.professor,
 							location: section.schedule.location,
+							displayTime: `${section.schedule.days.join("")} ${
+								section.schedule.startTime
+							}-${section.schedule.endTime}`,
 						},
 					};
 					allEvents.push(event);

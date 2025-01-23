@@ -3,7 +3,7 @@
 import { SemesterSelector } from "@/components/semester-selector/semester-selector";
 import { useCourseSearch } from "@/hooks/use-course-search";
 import { useSemesters } from "@/hooks/use-semesters";
-import { formatTime, groupSections, parseMeetingDays } from "@/lib/api/helpers";
+import { groupSections, parseMeetingTimes } from "@/lib/api/helpers";
 import { Course, SelectedCourse } from "@/types/course";
 import { useState } from "react";
 import { CourseSearch } from "./course-search";
@@ -41,54 +41,51 @@ export function CoursePicker({
 				name: group.title,
 				description: "",
 				credits: parseInt(group.lectures[0]?.total || "0"),
-				sections: group.lectures.map((lec) => ({
-					id: lec.crn,
-					professor: lec.instr || "TBA",
-					schedule: {
-						days: parseMeetingDays(
-							JSON.parse(lec.meetingTimes)[0]?.meet_day || ""
-						),
-						startTime: formatTime(
-							JSON.parse(lec.meetingTimes)[0]?.start_time || ""
-						),
-						endTime: formatTime(
-							JSON.parse(lec.meetingTimes)[0]?.end_time || ""
-						),
-						location: "",
-					},
-				})),
-				recitations: group.recitations.map((rec) => ({
-					id: rec.crn,
-					instructor: rec.instr || "TBA",
-					schedule: {
-						days: parseMeetingDays(
-							JSON.parse(rec.meetingTimes)[0]?.meet_day || ""
-						),
-						startTime: formatTime(
-							JSON.parse(rec.meetingTimes)[0]?.start_time || ""
-						),
-						endTime: formatTime(
-							JSON.parse(rec.meetingTimes)[0]?.end_time || ""
-						),
-						location: "",
-					},
-				})),
-				labs: group.labs.map((lab) => ({
-					id: lab.crn,
-					instructor: lab.instr || "TBA",
-					schedule: {
-						days: parseMeetingDays(
-							JSON.parse(lab.meetingTimes)[0]?.meet_day || ""
-						),
-						startTime: formatTime(
-							JSON.parse(lab.meetingTimes)[0]?.start_time || ""
-						),
-						endTime: formatTime(
-							JSON.parse(lab.meetingTimes)[0]?.end_time || ""
-						),
-						location: "",
-					},
-				})),
+				sections: group.lectures.map((lec) => {
+					const { days, startTime, endTime } = parseMeetingTimes(
+						lec.meetingTimes
+					);
+					return {
+						id: lec.crn,
+						professor: lec.instr || "TBA",
+						schedule: {
+							days,
+							startTime,
+							endTime,
+							location: "",
+						},
+					};
+				}),
+				recitations: group.recitations.map((rec) => {
+					const { days, startTime, endTime } = parseMeetingTimes(
+						rec.meetingTimes
+					);
+					return {
+						id: rec.crn,
+						instructor: rec.instr || "TBA",
+						schedule: {
+							days,
+							startTime,
+							endTime,
+							location: "",
+						},
+					};
+				}),
+				labs: group.labs.map((lab) => {
+					const { days, startTime, endTime } = parseMeetingTimes(
+						lab.meetingTimes
+					);
+					return {
+						id: lab.crn,
+						instructor: lab.instr || "TBA",
+						schedule: {
+							days,
+							startTime,
+							endTime,
+							location: "",
+						},
+					};
+				}),
 		  }))
 		: [];
 
