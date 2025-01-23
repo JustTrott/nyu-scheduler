@@ -15,7 +15,7 @@ export interface APISourceDB {
 
 export interface APIConfig {
 	srcDBs: APISourceDB[];
-	[key: string]: any; // for other config fields we might need later
+	[key: string]: unknown; // Replace any with unknown for better type safety
 }
 
 export interface APISearchCriterion {
@@ -57,5 +57,5 @@ export interface APISearchResponse {
 	results: APISearchSection[];
 	count: number;
 	status: string;
-	[key: string]: any; // for other fields we might need later
+	[key: string]: unknown; // Replace any with unknown for better type safety
 }
