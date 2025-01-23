@@ -20,16 +20,35 @@ export default function Home() {
 
 	// Set initial semester when data is loaded
 	useEffect(() => {
-		if (semesters?.length) {
+		if (semesters?.length && !selectedSemesterId) {
 			setSelectedSemesterId(semesters[0].id);
 		}
-	}, [semesters]);
+	}, [semesters, selectedSemesterId]);
 
-	const storageKey = `nyu-scheduler-courses-${selectedSemesterId}`;
+	// Only create storage key and load data when we have a valid semester ID
+	const storageKey = selectedSemesterId
+		? `nyu-scheduler-courses-${selectedSemesterId}`
+		: null;
 
 	const [selectedCourses, setSelectedCourses] = useLocalStorage<
 		SelectedCourse[]
-	>(storageKey, []);
+	>(
+		storageKey || "temp-key", // Use a temporary key if we don't have a semester yet
+		[]
+	);
+
+	// Clear courses when semester changes
+	useEffect(() => {
+		if (storageKey) {
+			const savedCourses = localStorage.getItem(storageKey);
+			if (savedCourses) {
+				setSelectedCourses(JSON.parse(savedCourses));
+			} else {
+				setSelectedCourses([]);
+			}
+		}
+	}, [storageKey, setSelectedCourses]);
+
 	const [activeTab, setActiveTab] = useState("search");
 
 	// Add logging when courses change
