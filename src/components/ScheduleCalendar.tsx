@@ -150,9 +150,9 @@ export function ScheduleCalendar({ selectedCourses }: ScheduleCalendarProps) {
 							"h:mm A"
 						)}`,
 				}}
-				components={{
-					event: EventWrapper,
-				}}
+				// components={{
+				// 	event: EventWrapper,
+				// }}
 			/>
 		</div>
 	);
@@ -171,42 +171,43 @@ function getDayIndex(day: string): number {
 	return dayMap[day] || 0;
 }
 
-interface EventWrapperProps {
-	event: Event;
-}
+// Custom event component to show more details. For now, we're not using this.
+// interface EventWrapperProps {
+// 	event: Event;
+// }
 
-function EventWrapper({ event }: EventWrapperProps) {
-	const resource = event.resource as {
-		type: "section" | "recitation" | "lab";
-		professor?: string;
-		instructor?: string;
-		location: string;
-	};
+// function EventWrapper({ event }: EventWrapperProps) {
+// 	const resource = event.resource as {
+// 		type: "section" | "recitation" | "lab";
+// 		professor?: string;
+// 		instructor?: string;
+// 		location: string;
+// 	};
 
-	const getEventClass = () => {
-		switch (resource.type) {
-			case "section":
-				return "bg-purple-100 border-purple-300 text-purple-900";
-			case "recitation":
-				return "bg-blue-100 border-blue-300 text-blue-900";
-			case "lab":
-				return "bg-green-100 border-green-300 text-green-900";
-			default:
-				return "";
-		}
-	};
+// 	const getEventClass = () => {
+// 		switch (resource.type) {
+// 			case "section":
+// 				return "bg-purple-100 border-purple-300 text-purple-900";
+// 			case "recitation":
+// 				return "bg-blue-100 border-blue-300 text-blue-900";
+// 			case "lab":
+// 				return "bg-green-100 border-green-300 text-green-900";
+// 			default:
+// 				return "";
+// 		}
+// 	};
 
-	return (
-		<div
-			className={`p-1 h-full border rounded ${getEventClass()} overflow-hidden`}
-		>
-			<div className="font-medium text-sm truncate">{event.title}</div>
-			<div className="text-xs truncate">
-				{resource.professor || resource.instructor}
-			</div>
-			{resource.location && (
-				<div className="text-xs truncate">{resource.location}</div>
-			)}
-		</div>
-	);
-}
+// 	return (
+// 		<div
+// 			className={`p-1 h-full border rounded ${getEventClass()} overflow-hidden`}
+// 		>
+// 			<div className="font-medium text-sm truncate">{event.title}</div>
+// 			<div className="text-xs truncate">
+// 				{resource.professor || resource.instructor}
+// 			</div>
+// 			{resource.location && (
+// 				<div className="text-xs truncate">{resource.location}</div>
+// 			)}
+// 		</div>
+// 	);
+// }
