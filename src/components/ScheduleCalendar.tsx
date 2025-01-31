@@ -146,7 +146,7 @@ export function ScheduleCalendar({ selectedCourses }: ScheduleCalendarProps) {
 				localizer={localizer}
 				className="h-full"
 				min={dayjs().set("hour", 6).set("minute", 0).toDate()}
-				max={dayjs().set("hour", 21).set("minute", 0).toDate()}
+				max={dayjs().set("hour", 22).set("minute", 0).toDate()}
 				onDrillDown={() => {}}
 				// components={{
 				// 	eventWrapper: EventWrapper,
