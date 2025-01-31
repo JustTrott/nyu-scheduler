@@ -39,7 +39,7 @@ export function CourseSearch({
 					</div>
 				) : showNoResults ? (
 					<div className="text-gray-500 text-center">
-						<p>No courses found for "{searchQuery}"</p>
+						<p>No courses found for &ldquo;{searchQuery}&rdquo;</p>
 						<p className="text-sm mt-1">
 							Try adjusting your search terms
 						</p>
