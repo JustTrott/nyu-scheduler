@@ -17,6 +17,10 @@ export function CourseSearch({
 	selectedCourseIds,
 	isLoading,
 }: CourseSearchProps) {
+	const showNoResults =
+		!isLoading && searchQuery.length >= 2 && courses.length === 0;
+	const showEmptyState = !isLoading && searchQuery.length < 2;
+
 	return (
 		<div className="flex flex-col h-full">
 			<div className="mb-4">
@@ -32,6 +36,20 @@ export function CourseSearch({
 				{isLoading ? (
 					<div className="text-gray-500 text-center">
 						Searching...
+					</div>
+				) : showNoResults ? (
+					<div className="text-gray-500 text-center">
+						<p>No courses found for "{searchQuery}"</p>
+						<p className="text-sm mt-1">
+							Try adjusting your search terms
+						</p>
+					</div>
+				) : showEmptyState ? (
+					<div className="text-gray-500 text-center">
+						<p>Type at least 2 characters to search</p>
+						<p className="text-sm mt-1">
+							Try searching by course code or name
+						</p>
 					</div>
 				) : (
 					<div className="flex flex-col gap-2">
